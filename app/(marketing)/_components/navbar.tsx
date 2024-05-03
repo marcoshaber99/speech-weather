@@ -1,3 +1,4 @@
+// app/(marketing)/_components/navbar.tsx
 "use client";
 
 import { useConvexAuth } from "convex/react";
@@ -9,7 +10,6 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/spinner";
 import { cn } from "@/lib/utils";
-import { Cloud } from "lucide-react";
 import { Logo } from "./logo";
 
 export const Navbar = () => {
