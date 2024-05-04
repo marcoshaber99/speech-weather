@@ -6,7 +6,6 @@ import { Spinner } from "./spinner";
 import Image from "next/image";
 import { createApi } from "unsplash-js";
 import { toast } from "sonner";
-
 import {
   WiDaySunny,
   WiDayCloudy,
@@ -18,7 +17,6 @@ import {
   WiSnow,
   WiFog,
 } from "react-icons/wi";
-
 import {
   LineChart,
   Line,
@@ -27,8 +25,9 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Legend,
 } from "recharts";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 const unsplash = createApi({
   accessKey: process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY!,
@@ -57,7 +56,7 @@ interface WeatherData {
   forecast: any[];
 }
 
-const getWeatherIcon = (iconCode: string) => {
+export const getWeatherIcon = (iconCode: string) => {
   switch (iconCode.slice(0, 2)) {
     case "01":
       return <WiDaySunny size={60} />;
@@ -81,6 +80,7 @@ const getWeatherIcon = (iconCode: string) => {
       return <WiDaySunny size={60} />;
   }
 };
+
 export const WeatherData = ({ city }: { city: string }) => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [error, setError] = useState("");
@@ -88,6 +88,12 @@ export const WeatherData = ({ city }: { city: string }) => {
   const [imageUrl, setImageUrl] = useState("");
   const [imagesLoading, setImagesLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const savedWeatherData = useQuery(api.weatherData.getWeatherDataByUser, {
+    city,
+  });
+
+  const saveWeatherData = useMutation(api.weatherData.saveWeatherData);
 
   useEffect(() => {
     const fetchWeatherData = async () => {
@@ -102,12 +108,12 @@ export const WeatherData = ({ city }: { city: string }) => {
           toast.error("Invalid city. Please try again.");
         } else {
           setWeatherData(data);
+          saveWeatherData({ city, data });
         }
       } catch (error) {
         setError("Failed to fetch weather data. Please try again.");
         toast.error("Failed to fetch weather data. Please try again.");
       }
-
       setLoading(false);
     };
 
@@ -132,12 +138,15 @@ export const WeatherData = ({ city }: { city: string }) => {
       } catch (error) {
         console.error("Failed to fetch image from Unsplash:", error);
       }
-
       setImagesLoading(false);
     };
 
     if (city) {
-      fetchWeatherData();
+      if (savedWeatherData) {
+        setWeatherData(savedWeatherData);
+      } else {
+        fetchWeatherData();
+      }
       fetchImage();
     } else {
       setWeatherData(null);
@@ -147,7 +156,7 @@ export const WeatherData = ({ city }: { city: string }) => {
     return () => {
       setWeatherData(null);
     };
-  }, [city]);
+  }, [city, savedWeatherData]);
 
   if (loading) {
     return <Spinner />;
@@ -226,6 +235,7 @@ export const WeatherData = ({ city }: { city: string }) => {
       };
     });
   };
+
   return (
     <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
       <div className="flex justify-between items-center mb-8">
@@ -283,9 +293,7 @@ export const WeatherData = ({ city }: { city: string }) => {
           <p>{main.pressure} hPa</p>
         </div>
       </div>
-
       <hr className="mt-8 border-t border-gray-300 dark:border-gray-600" />
-
       <div className="mt-8 dark:text-blue-200">
         <h3 className="text-xl font-semibold mb-4">{name} Forecast</h3>
         <div>

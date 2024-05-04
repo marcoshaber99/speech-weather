@@ -7,6 +7,7 @@ import SpeechRecognition, {
 } from "react-speech-recognition";
 import { Button } from "./ui/button";
 import { Mic, StopCircle } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface SpeechRecognitionComponentProps {
   onCityChange: (newCity: string) => void;
@@ -32,27 +33,44 @@ export const SpeechRecognitionComponent = ({
   };
 
   return (
-    <div className="flex flex-col items-center space-y-4">
-      <p className="text-xl font-semibold">Say the name of a city:</p>
-      <div className="flex space-x-4">
+    <div className="flex flex-col items-center space-y-6 mb-8">
+      <p className="text-2xl font-semibold text-center">
+        Say the name of a city to get the weather forecast
+      </p>
+      <div className="relative">
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full blur opacity-75"
+          initial={{ scale: 0 }}
+          animate={{ scale: isListening ? 1 : 0 }}
+          transition={{ duration: 0.5 }}
+        />
         <Button
-          onClick={startListening}
-          disabled={isListening}
-          className="bg-blue-500 hover:bg-blue-600 text-white"
+          onClick={isListening ? stopListening : startListening}
+          className="relative z-10 px-8 py-4 text-lg font-semibold text-white bg-blue-500 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
         >
-          <Mic className="h-6 w-6 mr-2" />
-          Start Recording
-        </Button>
-        <Button
-          onClick={stopListening}
-          disabled={!isListening}
-          className="bg-red-500 hover:bg-red-600 text-white"
-        >
-          <StopCircle className="h-6 w-6 mr-2" />
-          Stop Recording
+          {isListening ? (
+            <>
+              <StopCircle className="w-6 h-6 mr-2" />
+              Stop Recording
+            </>
+          ) : (
+            <>
+              <Mic className="w-6 h-6 mr-2" />
+              Start Recording
+            </>
+          )}
         </Button>
       </div>
-      {transcript && <p className="text-lg">Recognized city: {transcript}</p>}
+      {transcript && (
+        <motion.p
+          className="text-xl font-semibold text-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          Recognized city: {transcript}
+        </motion.p>
+      )}
     </div>
   );
 };

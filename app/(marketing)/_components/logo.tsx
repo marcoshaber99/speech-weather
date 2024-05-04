@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { Poppins } from "next/font/google";
-
-import { cn } from "@/lib/utils";
+import { Cloud, CloudSnow } from "lucide-react";
 
 const font = Poppins({
   subsets: ["latin"],
@@ -10,22 +9,12 @@ const font = Poppins({
 
 export const Logo = () => {
   return (
-    <div className="hidden md:flex items-center gap-x-2">
-      <Image
-        src="/cloud.svg"
-        height="40"
-        width="40"
-        alt="Logo"
-        className="dark:hidden"
-      />
-      <Image
-        src="/cloud-dark.svg"
-        height="40"
-        width="40"
-        alt="Logo"
-        className="hidden dark:block"
-      />
-      <p className={cn("font-semibold", font.className)}>HaberWeather</p>
+    <div className="flex items-center gap-x-2">
+      <CloudSnow height="48" width="48" className="dark:hidden" />
+      <CloudSnow height="48" width="48" className="hidden dark:block" />
+      <p className={"text-xl md:text-2xl font-semibold " + font.className}>
+        WeatherVoice
+      </p>
     </div>
   );
 };
