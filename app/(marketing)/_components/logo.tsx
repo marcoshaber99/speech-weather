@@ -8,7 +8,7 @@ const font = Poppins({
 
 export const Logo = () => {
   return (
-    <div className="flex items-center gap-x-2">
+    <div className="flex items-cente gap-x-2">
       <CloudSnow height="48" width="48" className="dark:hidden" />
       <CloudSnow height="48" width="48" className="hidden dark:block" />
       <p className={"text-xl md:text-2xl font-semibold " + font.className}>
