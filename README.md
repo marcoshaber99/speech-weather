@@ -12,11 +12,12 @@ WeatherVoice is a sleek and intuitive weather app that lets you access weather i
 
 ## 🛠️ Technologies Used:
 
-- Next.js 🚀
-- Convex 🗄️
+- Next.js 14 🚀
+- Convex 🗄
 - Clerk 🔑
-- Tailwind CSS 🎨
+- Tailwind CSS 🖌️
 - Shadcn UI 🎨
 - OpenWeatherMap API ☀️
+- Unsplash API 🌆
 - Framer Motion 🎥
 - React Speech Recognition 🎤
