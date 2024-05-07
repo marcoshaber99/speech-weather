@@ -7,6 +7,7 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/spinner";
+import Image from "next/image";
 
 export const Heading = () => {
   const { isAuthenticated, isLoading } = useConvexAuth();
@@ -25,7 +26,7 @@ export const Heading = () => {
         </div>
       )}
       {isAuthenticated && !isLoading && (
-        <Button asChild>
+        <Button size="lg" asChild>
           <Link href="/dashboard">
             Dashboard
             <ArrowRight className="h-4 w-4 ml-2" />
@@ -34,12 +35,61 @@ export const Heading = () => {
       )}
       {!isAuthenticated && !isLoading && (
         <SignInButton mode="modal">
-          <Button>
+          <Button size="lg">
             Get WeatherVoice
             <ArrowRight className="h-4 w-4 ml-2" />
           </Button>
         </SignInButton>
       )}
+
+      <div className="flex justify-center gap-2">
+        <Image
+          className="hidden dark:block"
+          src="/audio-dark.svg"
+          width={175}
+          height={175}
+          alt="speech"
+        />
+        <Image
+          className="dark:hidden"
+          src="/audio.svg"
+          width={175}
+          height={175}
+          alt="speech"
+        />
+
+        {/* arrow */}
+        <Image
+          className="hidden dark:block"
+          src="/arrow-dark.svg"
+          width={175}
+          height={175}
+          alt="speech"
+        />
+        <Image
+          className="dark:hidden"
+          src="/arrow.svg"
+          width={175}
+          height={175}
+          alt="speech"
+        />
+
+        {/* weather  */}
+        <Image
+          className="hidden dark:block"
+          src="/forecast-dark.svg"
+          width={175}
+          height={175}
+          alt="speech"
+        />
+        <Image
+          className="dark:hidden"
+          src="/forecast.svg"
+          width={175}
+          height={175}
+          alt="speech"
+        />
+      </div>
     </div>
   );
 };
