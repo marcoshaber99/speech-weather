@@ -6,7 +6,6 @@ import { redirect } from "next/navigation";
 import { SpeechRecognitionComponent } from "../../components/speech-recognition";
 import { WeatherData } from "@/components/weather-data";
 import { Sidebar } from "@/components/sidebar";
-import Image from "next/image";
 import { getRandomCity } from "@/lib/random-city";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -39,9 +38,19 @@ const DashboardPage = () => {
     setHasGuessed(true);
 
     if (isCorrectCity) {
-      toast.success("Congratulations! You said the correct city.");
+      toast.success("Congratulations! You said the correct city.", {
+        style: {
+          backgroundColor: "#e6f7ff",
+          color: "#1a7f37",
+        },
+      });
     } else {
-      toast.error("Cities do not match. Please try again.");
+      toast.error("Cities do not match. Please try again.", {
+        style: {
+          backgroundColor: "#fff5f5",
+          color: "#c53030",
+        },
+      });
     }
   };
 

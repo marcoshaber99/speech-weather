@@ -66,3 +66,38 @@ export const getAllWeatherDataByUser = query({
     return weatherData;
   },
 });
+
+export const deleteWeatherDataByCity = mutation({
+  args: {
+    city: v.string(),
+  },
+  handler: async ({ db, auth }, { city }) => {
+    const identity = await auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Unauthenticated");
+    }
+    const userId = identity.subject;
+
+    const weatherDataToDelete = await db
+      .query("weatherData")
+      .withIndex("by_user_city", (q) => q.eq("userId", userId).eq("city", city))
+      .collect();
+
+    await Promise.all(weatherDataToDelete.map((data) => db.delete(data._id)));
+  },
+});
+
+export const deleteWeatherDataByUser = mutation(async ({ db, auth }) => {
+  const identity = await auth.getUserIdentity();
+  if (!identity) {
+    throw new Error("Unauthenticated");
+  }
+  const userId = identity.subject;
+
+  const weatherDataToDelete = await db
+    .query("weatherData")
+    .withIndex("by_user", (q) => q.eq("userId", userId))
+    .collect();
+
+  await Promise.all(weatherDataToDelete.map((data) => db.delete(data._id)));
+});

@@ -42,7 +42,7 @@ export const Heading = () => {
         </SignInButton>
       )}
 
-      <div className="flex justify-center gap-2">
+      <div className="flex justify-center gap-2 pt-12">
         <Image
           className="hidden dark:block"
           src="/audio-dark.svg"

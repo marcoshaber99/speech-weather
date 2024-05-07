@@ -146,6 +146,18 @@ const cities = [
   "San Carlos",
   "Minas",
   "Treinta y Tres",
+  "Nicosia",
+  "Limassol",
+  "Larnaca",
+  "Los Angeles",
+  "San Francisco",
+  "Las Vegas",
+  "Seattle",
+  "Portland",
+  "Denver",
+  "Phoenix",
+  "Albuquerque",
+  "Salt Lake City",
 ];
 
 export const getRandomCity = () => {
