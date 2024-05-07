@@ -4,7 +4,6 @@ import { Sidebar } from "@/components/sidebar";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useEffect, useState } from "react";
-import { Spinner } from "@/components/spinner";
 import { getWeatherIcon } from "@/components/weather-data";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
@@ -13,6 +12,7 @@ import { WiHumidity, WiStrongWind, WiBarometer } from "react-icons/wi";
 import { RiTempColdLine, RiTempHotLine } from "react-icons/ri";
 import { useConvexAuth } from "convex/react";
 import { redirect } from "next/navigation";
+import { Logo } from "../(marketing)/_components/logo";
 
 const WeatherPage: React.FC = () => {
   const { isAuthenticated, isLoading: isAuthLoading } = useConvexAuth();
@@ -32,8 +32,8 @@ const WeatherPage: React.FC = () => {
     return (
       <div className="flex min-h-screen">
         <Sidebar />
-        <div className="flex-1 p-8 md:p-12 lg:p-16 flex items-center justify-center">
-          <Spinner />
+        <div className="flex-1 p-8 md:p-12 lg:p-16 flex items-center justify-center animate-pulse">
+          <Logo />
         </div>
       </div>
     );
@@ -47,8 +47,8 @@ const WeatherPage: React.FC = () => {
     return (
       <div className="flex min-h-screen">
         <Sidebar />
-        <div className="flex-1 p-8 md:p-12 lg:p-16 flex items-center justify-center">
-          <Spinner />
+        <div className="flex-1 p-8 md:p-12 lg:p-16 flex items-center justify-center animate-pulse">
+          <Logo />
         </div>
       </div>
     );

@@ -33,10 +33,7 @@ export const SpeechRecognitionComponent = ({
   };
 
   return (
-    <div className="flex flex-col items-center space-y-6 mb-8">
-      <p className="text-2xl font-semibold text-center">
-        Say the name of a city to get the weather forecast
-      </p>
+    <div className="flex flex-col items-center space-y-6 mb-8 mt-6">
       <div className="relative">
         <motion.div
           className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full blur opacity-75"

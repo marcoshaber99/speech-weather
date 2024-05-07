@@ -7,60 +7,114 @@ import { SpeechRecognitionComponent } from "../../components/speech-recognition"
 import { WeatherData } from "@/components/weather-data";
 import { Sidebar } from "@/components/sidebar";
 import Image from "next/image";
+import { getRandomCity } from "@/lib/random-city";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Logo } from "../(marketing)/_components/logo";
+import { RiErrorWarningFill } from "react-icons/ri";
+import { toast } from "sonner";
 
 const DashboardPage = () => {
-  const { isAuthenticated, isLoading } = useConvexAuth();
+  const { isAuthenticated, isLoading: authLoading } = useConvexAuth();
   const [city, setCity] = useState("");
+  const [displayedCity, setDisplayedCity] = useState("");
+  const [isCorrect, setIsCorrect] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasGuessed, setHasGuessed] = useState(false);
 
   useEffect(() => {
-    // Retrieve the last selected city from local storage
-    const storedCity = localStorage.getItem("selectedCity");
-    if (storedCity) {
-      setCity(storedCity);
-    }
+    const fetchRandomCity = async () => {
+      setIsLoading(true);
+      const randomCity = getRandomCity();
+      setDisplayedCity(randomCity);
+      setIsLoading(false);
+    };
+    fetchRandomCity();
   }, []);
 
   const handleCityChange = (newCity: string) => {
     setCity(newCity);
-    // Store the selected city in local storage
-    localStorage.setItem("selectedCity", newCity);
+    const isCorrectCity = newCity.toLowerCase() === displayedCity.toLowerCase();
+    setIsCorrect(isCorrectCity);
+    setHasGuessed(true);
+
+    if (isCorrectCity) {
+      toast.success("Congratulations! You said the correct city.");
+    } else {
+      toast.error("Cities do not match. Please try again.");
+    }
   };
 
-  if (isLoading) {
+  const handleNewCity = () => {
+    setCity("");
+    setDisplayedCity(getRandomCity());
+    setIsCorrect(false);
+    setHasGuessed(false);
+  };
+
+  if (authLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Image
-          src="/cloud.svg"
-          alt="WeatherVoice"
-          width={64}
-          height={64}
-          className="animate-spin dark:hidden"
-        />
-        <Image
-          src="/cloud-dark.svg"
-          alt="WeatherVoice"
-          width={64}
-          height={64}
-          className="animate-spin"
-        />
+      <div className="flex min-h-screen items-center justify-center animate-pulse">
+        <Logo />
       </div>
     );
   }
 
   if (!isAuthenticated) {
-    // Redirect the user to the login page if not authenticated
     redirect("/");
   }
 
   return (
     <div className="flex min-h-screen dark:bg-[#181A20]">
       <Sidebar />
-      <div className="flex-1 p-8 md:p-12 lg:p-16 mt-8">
-        {/* <h1 className="text-4xl font-bold mb-8">Weather Dashboard</h1> */}
-        <div className="mb-8">
+      <div className="flex-1 justify-center items-center p-8 md:p-12 lg:p-16 mt-10 md:mt-4">
+        <p className="text-2xl font-semibold text-center pb-6">
+          Say the name of the city below to get the weather forecast
+        </p>
+        <div className="flex flex-col justify-center items-center mb-8">
+          <div className="flex items-center gap-4">
+            {isLoading ? (
+              <p className="text-2xl font-semibold mb-4">Loading city...</p>
+            ) : (
+              <motion.div
+                className="flex items-center gap-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="bg-blue-500 text-white px-6 py-3 rounded-full shadow-lg">
+                  <p className="text-xl font-semibold">Say: {displayedCity}</p>
+                </div>
+                <Button onClick={handleNewCity} className="text-lg rounded-lg">
+                  Try another city
+                </Button>
+              </motion.div>
+            )}
+          </div>
           <SpeechRecognitionComponent onCityChange={handleCityChange} />
         </div>
-        <WeatherData city={city} />
+        {hasGuessed && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            {isCorrect ? (
+              <>
+                <WeatherData city={city} />
+              </>
+            ) : (
+              <div className="flex items-center justify-center mt-8">
+                <RiErrorWarningFill className="text-red-500 w-16 h-16 mr-4" />
+                <div className="bg-red-100 text-red-500 px-6 py-4 rounded-lg shadow-md">
+                  <p className="text-xl font-semibold text-center">
+                    Cities do not match. Please try again.
+                  </p>
+                </div>
+              </div>
+            )}
+          </motion.div>
+        )}
       </div>
     </div>
   );
