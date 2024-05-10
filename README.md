@@ -7,7 +7,6 @@ WeatherVoice is a sleek and intuitive weather app that lets you access weather i
 - 🌡️ Current weather conditions
 - 🗓️ Detailed weather forecasts
 - 🔒 Secure user authentication with Clerk
-- 💼 Personalized dashboard for favorite cities
 - 📱 Responsive design for desktop and mobile
 
 ## 🛠️ Technologies Used:
